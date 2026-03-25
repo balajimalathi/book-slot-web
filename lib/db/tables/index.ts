@@ -5,6 +5,7 @@ export { verification } from "./verification";
 export { apiKey } from "./api-key";
 
 export { organization } from "./organization";
+export { organizationMember } from "./organization-member";
 export { service } from "./service";
 export { availability } from "./availability";
 export { blackoutDate } from "./blackout-date";

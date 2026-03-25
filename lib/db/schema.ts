@@ -5,6 +5,7 @@ export {
   verification,
   apiKey,
   organization,
+  organizationMember,
   service,
   availability,
   blackoutDate,

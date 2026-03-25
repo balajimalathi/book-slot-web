@@ -6,7 +6,7 @@ import LogoutButton from "@/components/auth/logout-button-icon";
 import { Announcement, AnnouncementTag, AnnouncementTitle } from "@/components/kibo-ui/announcement";
 import { ArrowUpRightIcon } from "lucide-react";
 
-export default async function DashboardPage() {
+export default async function OrgDashboardPage() {
   const session = await auth.api.getSession({
     headers: await headers(),
   });

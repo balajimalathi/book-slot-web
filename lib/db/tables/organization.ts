@@ -4,6 +4,9 @@ export const organization = pgTable("organization", {
   // BetterAuth "orgId"
   id: text("id").primaryKey(),
   name: text("name").notNull(),
+  // Collected during onboarding (org-scoped admin).
+  email: text("email"),
+  phone: text("phone"),
   slug: text("slug").notNull().unique(),
 
   logoUrl: text("logo_url"),

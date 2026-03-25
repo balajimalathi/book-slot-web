@@ -55,7 +55,7 @@ export function LoginForm({
     setServerError("");
     await authClient.signIn.social({
       provider: "google",
-      callbackURL: "/dash",
+      callbackURL: "/onboarding",
       fetchOptions: {
         onRequest: () => {
           setLoading(true);
@@ -79,7 +79,7 @@ export function LoginForm({
       {
         email: values.email,
         password: values.password,
-        callbackURL: "/dash",
+        callbackURL: "/onboarding",
       },
       {
         onRequest: () => {

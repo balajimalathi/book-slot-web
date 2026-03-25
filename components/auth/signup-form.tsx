@@ -155,7 +155,7 @@ export function SignupForm({
               onClick={async () => {
                 await authClient.signIn.social({
                   provider: "google",
-                  callbackURL: "/dash",
+                  callbackURL: "/onboarding",
                   fetchOptions: {
                     onRequest: (ctx) => {
                       toast.loading("Authenticating...");
@@ -208,7 +208,7 @@ export function SignupForm({
               onClick={async () => {
                 await authClient.signIn.social({
                   provider: "twitter",
-                  callbackURL: "/dash",
+                  callbackURL: "/onboarding",
                   fetchOptions: {
                     onRequest: (ctx) => {
                       toast.loading("Authenticating...");
@@ -241,7 +241,7 @@ export function SignupForm({
               onClick={async () => {
                 await authClient.signIn.social({
                   provider: "github",
-                  callbackURL: "/dash",
+                  callbackURL: "/onboarding",
                   fetchOptions: {
                     onRequest: (ctx) => {
                       toast.loading("Authenticating...");
