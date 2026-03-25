@@ -5,9 +5,8 @@ import { and, eq } from "drizzle-orm";
 import { db } from "@/lib/db/db";
 import { requireOrgAdmin } from "@/lib/auth/require-org-admin";
 import { availability as availabilityTable, organization as organizationTable } from "@/lib/db/schema";
+import { ORG_WIDE_STAFF_ID } from "@/lib/constants/availability";
 import { AvailabilitySettingsSchema } from "@/lib/validations/availability-settings";
-
-const ORG_WIDE_STAFF_ID = "org-wide";
 
 function defaultDay() {
   return {
