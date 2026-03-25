@@ -204,6 +204,7 @@ export function SignupForm({
               {/* Continue with Google */}
             </button>
             <button
+              hidden
               onClick={async () => {
                 await authClient.signIn.social({
                   provider: "twitter",
@@ -236,6 +237,7 @@ export function SignupForm({
               </svg>
             </button>
             <button
+              hidden
               onClick={async () => {
                 await authClient.signIn.social({
                   provider: "github",

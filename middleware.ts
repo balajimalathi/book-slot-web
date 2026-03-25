@@ -1,21 +1,25 @@
 import { NextResponse, type NextRequest } from "next/server";
 
-export async function middleware(req: NextRequest) {
-  const requestHeaders = new Headers(req.headers);
-
-  // Always include the current pathname so layouts/pages can branch on it.
-  requestHeaders.set("x-pathname", req.nextUrl.pathname);
-
-  return NextResponse.next({
-    request: {
-      headers: requestHeaders,
-    },
-  });
-}
-
 export const config = {
-  // Run on all app routes so `x-pathname` is always available,
-  // and still support dashboard subdomain resolution.
-  matcher: ["/:path*"],
+  matcher: ["/dash/:path*"],
 };
+
+export async function middleware(req: NextRequest) {
+  // Middleware runs in Edge runtime. Avoid importing BetterAuth here (it
+  // pulls in dynamic code + Node-only dependencies).
+  //
+  // We do a lightweight check: if the BetterAuth session cookie isn't
+  // present, redirect to login. The server-rendered dashboard layout
+  // performs full session validation.
+  const sessionToken =
+    req.cookies.get("better-auth.session_token")?.value ??
+    req.cookies.get("__Secure-better-auth.session_token")?.value;
+
+  if (!sessionToken) {
+    const url = new URL("/login", req.url);
+    return NextResponse.redirect(url);
+  }
+
+  return NextResponse.next();
+}
 

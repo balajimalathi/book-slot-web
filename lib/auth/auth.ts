@@ -4,10 +4,22 @@ import { nextCookies } from "better-auth/next-js";
 import { admin, createAuthMiddleware } from "better-auth/plugins";
 import { db } from "../db/db";
 import { env } from "@/env";
-import {
-  sendResetPasswordEmail,
-  sendVerificationEmail,
-} from "@/lib/email/send-email";
+
+async function sendResetPasswordEmailLazy(
+  params: { user: { email: string | null }; url: string; token?: string },
+  request: unknown
+) {
+  const mod = await import("@/lib/email/send-email");
+  return mod.sendResetPasswordEmail(params, request);
+}
+
+async function sendVerificationEmailLazy(
+  params: { user: { email: string | null }; url: string; token?: string },
+  request: unknown
+) {
+  const mod = await import("@/lib/email/send-email");
+  return mod.sendVerificationEmail(params, request);
+}
 
 
 function buildSocialProviders() {
@@ -33,12 +45,12 @@ export const auth = betterAuth({
     enabled: true,
     requireEmailVerification: true,
     sendResetPassword: async ({ user, url, token }, request) => {
-      void sendResetPasswordEmail({ user, url, token }, request);
+      await sendResetPasswordEmailLazy({ user, url, token }, request);
     },
   },
   emailVerification: {
     sendVerificationEmail: async ({ user, url, token }, request) => {
-      void sendVerificationEmail({ user, url, token }, request);
+      await sendVerificationEmailLazy({ user, url, token }, request);
     },
   },
   hooks: {
