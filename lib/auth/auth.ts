@@ -53,6 +53,18 @@ export const auth = betterAuth({
       await sendVerificationEmailLazy({ user, url, token }, request);
     },
   },
+  user: {
+    changeEmail: {
+      enabled: true,
+    },
+    additionalFields: {
+      timezone: {
+        type: "string",
+        required: false,
+        defaultValue: "UTC",
+      },
+    },
+  },
   hooks: {
     before: createAuthMiddleware(async (ctx) => { }),
   },

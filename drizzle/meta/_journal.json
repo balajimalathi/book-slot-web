@@ -15,6 +15,13 @@
       "when": 1774449740985,
       "tag": "0001_real_sharon_ventura",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1774454502348,
+      "tag": "0002_tan_lady_ursula",
+      "breakpoints": true
     }
   ]
 }

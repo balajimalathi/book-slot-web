@@ -8,4 +8,4 @@ export const authClient = createAuthClient({
   },
 });
 
-const { useSession, signOut } = authClient;
+export const { useSession, signOut } = authClient;

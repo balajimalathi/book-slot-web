@@ -1,4 +1,5 @@
 import {
+  Calendar,
   Construction,
   LayoutDashboard,
   Monitor,
@@ -173,25 +174,40 @@ export const sidebarData: SidebarData = {
               icon: UserCog,
             },
             {
-              title: 'Account',
-              url: '/settings/account',
-              icon: Wrench,
+              title: 'Organization',
+              url: '/settings/organization',
+              icon: Users,
             },
             {
-              title: 'Appearance',
-              url: '/settings/appearance',
-              icon: Palette,
+              title: 'Availability',
+              url: '/settings/availability',
+              icon: Calendar,
             },
             {
-              title: 'Notifications',
-              url: '/settings/notifications',
-              icon: Bell,
+              title: 'Blackouts',
+              url: '/settings/blackouts',
+              icon: Calendar,
             },
-            {
-              title: 'Display',
-              url: '/settings/display',
-              icon: Monitor,
-            },
+            // {
+            //   title: 'Account',
+            //   url: '/settings/account',
+            //   icon: Wrench,
+            // },
+            // {
+            //   title: 'Appearance',
+            //   url: '/settings/appearance',
+            //   icon: Palette,
+            // },
+            // {
+            //   title: 'Notifications',
+            //   url: '/settings/notifications',
+            //   icon: Bell,
+            // },
+            // {
+            //   title: 'Display',
+            //   url: '/settings/display',
+            //   icon: Monitor,
+            // },
           ],
         },
         {
