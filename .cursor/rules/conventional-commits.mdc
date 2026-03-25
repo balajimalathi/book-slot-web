@@ -1,0 +1,29 @@
+---
+description: Conventional commit types and format for this project
+alwaysApply: true
+---
+
+# Conventional Commits
+
+Use this format and type set for all suggested commit messages: `type(scope): subject`. Header must be ≤ 100 characters.
+
+## Allowed types and when to use them
+
+| Type | When to use | Example |
+|------|-------------|---------|
+| **feat** | New feature for user or product | `feat(auth): add OAuth2 login support` |
+| **fix** | Bug fix affecting behavior or UX | `fix(login): correct password reset validation` |
+| **docs** | Documentation (README, docs, comments) | `docs(README): add contribution guidelines` |
+| **style** | Formatting, whitespace, lint; no logic change | `style(login): format code and fix lint issues` |
+| **refactor** | Restructure/rename/move; no behavior change | `refactor(user): extract user validation methods` |
+| **perf** | Performance improvement | `perf(image): optimize image loading for startup` |
+| **test** | Add or update tests | `test(api): add tests for error handling in login` |
+| **build** | Build, tools, dependencies, scripts | `build: update build_runner from 2.4.0 to 2.4.13` |
+| **ci** | CI config (GitHub Actions, GitLab CI, scripts) | `ci: add test coverage badge to workflow` |
+| **chore** | Maintenance, deps, tooling; not user-facing | `chore: update .gitignore for macOS files` |
+
+## Rules
+
+- Format: `type(scope): subject` (e.g. `feat(ui): add dark mode toggle`).
+- Scope is optional for broad changes (e.g. `chore: bump deps`).
+- Pick the type that matches the change; do not use types outside the table above.
