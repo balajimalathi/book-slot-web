@@ -1,0 +1,88 @@
+---
+description: Use react-hook-form + Zod with shadcn for all Next.js forms
+alwaysApply: true
+---
+
+# Next.js Form Patterns
+
+- **Form state**: Always use `react-hook-form` to manage form state and submission in React components.
+- **Validation schema**: Always use `zod` schemas for validation and type inference instead of ad-hoc validation or hand-written TypeScript types.
+- **UI components**: Use shadcn UI form primitives (`Form`, `FormField`, `FormItem`, `FormLabel`, `FormControl`, `FormMessage`) to render fields.
+- **Single source of truth**: Validation rules should live in the Zod schema; avoid duplicating them in component props or inline conditionals when possible.
+- **Types from schemas**: Infer TypeScript types from Zod (`z.infer<typeof FormSchema>`) instead of redefining interfaces.
+
+## Example Pattern
+
+```tsx
+import { z } from "zod";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+
+import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+
+const FormSchema = z.object({
+  name: z.string().min(1, "Name is required"),
+  email: z.string().email("Enter a valid email"),
+});
+
+type FormValues = z.infer<typeof FormSchema>;
+
+export function ExampleForm() {
+  const form = useForm<FormValues>({
+    resolver: zodResolver(FormSchema),
+    defaultValues: {
+      name: "",
+      email: "",
+    },
+  });
+
+  function onSubmit(values: FormValues) {
+    // Submit logic here, using validated values
+  }
+
+  return (
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+        <FormField
+          control={form.control}
+          name="name"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Name</FormLabel>
+              <FormControl>
+                <Input placeholder="Your name" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="email"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Email</FormLabel>
+              <FormControl>
+                <Input type="email" placeholder="you@example.com" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <Button type="submit">Save</Button>
+      </form>
+    </Form>
+  );
+}
+```
+
+## Non-Preferred Patterns
+
+- Avoid using `useState` for individual form fields instead of `react-hook-form`.
+- Avoid manual `onSubmit` validation without Zod schemas.
+- Avoid mixing multiple validation libraries in the same project or form; standardize on `zod`.
+

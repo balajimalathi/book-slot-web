@@ -1,0 +1,36 @@
+---
+description: Enforce using global theme colors and shadcn tokens instead of hard-coded colors
+alwaysApply: true
+---
+
+# Color & Theme Usage
+
+- **Use global theme variables**: Always use colors defined in `global.css`, Tailwind config, or shadcn theme tokens (e.g. `bg-primary`, `text-muted-foreground`, `border-border`) instead of hard-coded hex, rgb, or hsl values.
+- **Avoid static color literals in UI code**:
+  - In React/Next.js components, do **not** use inline styles with raw colors (e.g. `style={{ color: "#ff0000" }}` or `style={{ backgroundColor: "red" }}`).
+  - In CSS, SCSS, or other style files, avoid raw `#hex`, `rgb(...)`, or named colors; prefer CSS variables from the theme (e.g. `var(--primary)`, `var(--muted-foreground)`).
+- **Follow shadcn theme tokens**: When using shadcn UI components, prefer the documented semantic classes (`bg-background`, `text-foreground`, `bg-secondary`, etc.) and extend via theme tokens rather than introducing new arbitrary colors.
+- **Centralize new colors**: If a new color is needed, add it once to the global theme (e.g. in `global.css` or Tailwind config) and reference it by variable or token, rather than inlining it where it is used.
+
+## Examples
+
+```tsx
+// ❌ BAD - hard-coded color in component
+<div style={{ backgroundColor: "#ff0000" }}>Alert</div>
+
+// ✅ GOOD - use theme class
+<div className="bg-destructive text-destructive-foreground">Alert</div>
+```
+
+```css
+/* ❌ BAD - hard-coded hex */
+.custom-badge {
+  background-color: #0ea5e9;
+}
+
+/* ✅ GOOD - use theme variable */
+.custom-badge {
+  background-color: var(--primary);
+}
+```
+

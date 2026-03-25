@@ -1,0 +1,45 @@
+---
+description: Always use bun to manage and install dependencies instead of editing package.json directly
+alwaysApply: true
+---
+
+# Dependency Management with bun
+
+- Always use `bun` CLI to add, remove, or update dependencies.
+- **Do not** manually edit `dependencies` or `devDependencies` in `package.json` to add new packages.
+
+## Installing New Dependencies
+
+Use `bun install` commands:
+
+```bash
+# Add a runtime dependency
+bun install <package-name>
+
+# Add a dev dependency
+bun install -d <package-name>
+```
+
+This ensures `package.json` and lockfiles stay in sync.
+
+## Updating Dependencies
+
+Use bun instead of editing version ranges:
+
+```bash
+# Update a specific package
+bun update <package-name>
+
+# Update all dependencies
+bun update
+```
+
+## Removing Dependencies
+
+Use:
+
+```bash
+bun remove <package-name>
+```
+
+Do not delete entries directly from `package.json`; let `bun` handle it.
