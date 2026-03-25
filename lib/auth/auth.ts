@@ -4,6 +4,10 @@ import { nextCookies } from "better-auth/next-js";
 import { admin, createAuthMiddleware } from "better-auth/plugins";
 import { db } from "../db/db";
 import { env } from "@/env";
+import {
+  sendResetPasswordEmail,
+  sendVerificationEmail,
+} from "@/lib/email/send-email";
 
 
 function buildSocialProviders() {
@@ -20,12 +24,22 @@ function buildSocialProviders() {
 
 export const auth = betterAuth({
   baseURL: env.BETTER_AUTH_URL,
-  secret: env.BETTER_AUTH_SECRET,
+  // Allow empty placeholders locally; auth still works with dev secret.
+  secret: env.BETTER_AUTH_SECRET || "dev-secret-dev-secret-dev-secret-dev-secret-123",
   database: drizzleAdapter(db, {
     provider: "pg",
   }),
   emailAndPassword: {
-    enabled: false,
+    enabled: true,
+    requireEmailVerification: true,
+    sendResetPassword: async ({ user, url, token }, request) => {
+      void sendResetPasswordEmail({ user, url, token }, request);
+    },
+  },
+  emailVerification: {
+    sendVerificationEmail: async ({ user, url, token }, request) => {
+      void sendVerificationEmail({ user, url, token }, request);
+    },
   },
   hooks: {
     before: createAuthMiddleware(async (ctx) => { }),
