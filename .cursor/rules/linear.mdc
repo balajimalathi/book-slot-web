@@ -1,0 +1,19 @@
+---
+description: Linear workflow updates for issue-based work
+alwaysApply: true
+---
+
+
+# Linear Workflow
+
+- If the user references Linear, first obtain the issue identifier (`SKN-123` or Linear URL). If missing, ask for it.
+- Treat the Linear issue as the source of truth for scope/acceptance criteria; align code changes accordingly.
+- If you need to create a new Linear issue for this repo, create it in the `BookSlot` Linear project with id `bookslot-fc63af685106`.
+- When starting work, update the issue status to `In Progress` unless the user specifies a different status.
+- After completing the work, update the same Linear issue by:
+  - adding a short comment summarizing what changed
+  - including the PR/commit link if available
+  - setting status to `Done` (or to the user-specified target status)
+- Access and update Linear issues via MCP tools (use the available Linear MCP integration). Do not use web fetching/search to read or update issues.
+- If the user provides a Linear issue URL (example: `https://linear.app/skndan/issue/SKN-12/project-setup`), extract the key (`SKN-12`) and use MCP to fetch/update that issue.
+- If you can’t update status/links (not provided), ask the user what status to set and what link to include.

@@ -1,0 +1,9 @@
+---
+description: Install shadcn components via bunx
+alwaysApply: true
+---
+# Shadcn Install Command
+- When adding/installing shadcn components, use `bunx` (not `npx`/`npm`) to run the shadcn CLI.
+- Prefer these patterns:
+  - Add a component: `bunx --bun shadcn@latest add <component-name>`
+- If the shadcn CLI asks additional prompts, follow the defaults that match your repo’s existing shadcn setup.
