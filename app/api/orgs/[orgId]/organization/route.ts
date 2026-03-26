@@ -5,6 +5,8 @@ import { organization as organizationTable } from "@/lib/db/schema";
 import { requireOrgAdmin } from "@/lib/auth/require-org-admin";
 import { OrganizationCoreSettingsSchema } from "@/lib/validations/organization-core";
 
+const REDACTED_SECRET = "********";
+
 export async function GET(
   _request: Request,
   { params }: { params: Promise<{ orgId: string }> },
@@ -45,7 +47,13 @@ export async function GET(
     return NextResponse.json({ error: "Organization not found" }, { status: 404 });
   }
 
-  return NextResponse.json({ organization: orgRow });
+  return NextResponse.json({
+    organization: {
+      ...orgRow,
+      razorpayKeySecret: orgRow.razorpayKeySecret ? REDACTED_SECRET : null,
+      dodopayClientSecret: orgRow.dodopayClientSecret ? REDACTED_SECRET : null,
+    },
+  });
 }
 
 export async function POST(
@@ -65,6 +73,26 @@ export async function POST(
   }
 
   const parsed = OrganizationCoreSettingsSchema.parse(body);
+  const [existingOrg] = await db
+    .select({
+      razorpayKeySecret: organizationTable.razorpayKeySecret,
+      dodopayClientSecret: organizationTable.dodopayClientSecret,
+    })
+    .from(organizationTable)
+    .where(eq(organizationTable.id, orgId));
+
+  if (!existingOrg) {
+    return NextResponse.json({ error: "Organization not found" }, { status: 404 });
+  }
+
+  const nextRazorpaySecret =
+    parsed.razorpayKeySecret === REDACTED_SECRET
+      ? existingOrg.razorpayKeySecret
+      : (parsed.razorpayKeySecret ?? null);
+  const nextDodoSecret =
+    parsed.dodopayClientSecret === REDACTED_SECRET
+      ? existingOrg.dodopayClientSecret
+      : (parsed.dodopayClientSecret ?? null);
 
   const now = new Date();
   await db
@@ -83,9 +111,9 @@ export async function POST(
       cancellationPolicyHours: parsed.cancellationPolicyHours,
       paymentGateway: parsed.paymentGateway ?? "RAZORPAY",
       razorpayKeyId: parsed.razorpayKeyId ?? null,
-      razorpayKeySecret: parsed.razorpayKeySecret ?? null,
+      razorpayKeySecret: nextRazorpaySecret,
       dodopayClientId: parsed.dodopayClientId ?? null,
-      dodopayClientSecret: parsed.dodopayClientSecret ?? null,
+      dodopayClientSecret: nextDodoSecret,
       updatedAt: now,
     })
     .where(eq(organizationTable.id, orgId));

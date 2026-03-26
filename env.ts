@@ -26,6 +26,10 @@ export const env = createEnv({
     SMTP_USER: z.string().min(1).optional(),
     SMTP_PASS: z.string().min(1).optional(),
     SMTP_FROM: z.string().min(1).optional(),
+
+    // Payment mocks/stubs
+    MOCK_PAYMENT_WEBHOOK_SECRET: z.string().optional(),
+    MOCK_PAYMENT_CALLBACK_TOKEN: z.string().optional(),
   },
   client: {
     NEXT_PUBLIC_URL: z.string().url(),
@@ -44,6 +48,8 @@ export const env = createEnv({
     SMTP_USER: process.env.SMTP_USER,
     SMTP_PASS: process.env.SMTP_PASS,
     SMTP_FROM: process.env.SMTP_FROM,
+    MOCK_PAYMENT_WEBHOOK_SECRET: process.env.MOCK_PAYMENT_WEBHOOK_SECRET,
+    MOCK_PAYMENT_CALLBACK_TOKEN: process.env.MOCK_PAYMENT_CALLBACK_TOKEN,
   },
   skipValidation: !!process.env.SKIP_ENV_VALIDATION,
 });
