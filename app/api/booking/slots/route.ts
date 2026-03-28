@@ -1,10 +1,13 @@
 import { NextResponse } from "next/server";
+import { eq } from "drizzle-orm";
 import { ZodError } from "zod";
 
 import {
   getAvailableSlots,
   GetAvailableSlotsNotFoundError,
 } from "@/lib/availability/get-available-slots";
+import { db } from "@/lib/db/db";
+import { organization as organizationTable } from "@/lib/db/schema";
 import {
   BookingSlotsQuerySchema,
   type BookingSlotsQuery,
@@ -12,8 +15,21 @@ import {
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
+  const orgIdOrSlug = searchParams.get("orgId") ?? "";
+  let resolvedOrgId = orgIdOrSlug;
+  if (orgIdOrSlug) {
+    const [orgBySlug] = await db
+      .select({ id: organizationTable.id })
+      .from(organizationTable)
+      .where(eq(organizationTable.slug, orgIdOrSlug))
+      .limit(1);
+    if (orgBySlug) {
+      resolvedOrgId = orgBySlug.id;
+    }
+  }
+
   const raw = {
-    orgId: searchParams.get("orgId") ?? "",
+    orgId: resolvedOrgId,
     staffId: searchParams.get("staffId") ?? "",
     serviceId: searchParams.get("serviceId") ?? "",
     date: searchParams.get("date") ?? "",

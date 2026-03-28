@@ -50,6 +50,13 @@ export const DodoPayWebhookSchema = z.object({
   referenceCode: z.string().min(1),
 });
 
+export const MockPaymentCompleteSchema = z.object({
+  orgId: z.string().min(1),
+  referenceCode: z.string().min(1),
+  gateway: PaymentGatewaySchema,
+  status: z.enum(["SUCCESS", "FAILED"]),
+});
+
 export type CreatePaymentOrderRequest = z.infer<
   typeof CreatePaymentOrderRequestSchema
 >;

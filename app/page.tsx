@@ -1,15 +1,9 @@
-import { auth } from "@/lib/auth/auth"; // path to your Better Auth server instance
-import { headers } from "next/headers";
-
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { ModeToggle } from "@/components/ui/mode-toggle";
 import { CalendarDays } from "lucide-react";
-import LogoutButton from "@/components/auth/logout-button-icon";
+
 export default async function page() {
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  });
   return (
     <div className="flex relative min-h-screen flex-col bg-background">
       <header className="relative z-20 border-b bg-background/50 backdrop-blur-md">
@@ -21,60 +15,46 @@ export default async function page() {
           <nav className="flex items-center gap-6">
             <div className="flex items-center gap-2">
               <ModeToggle />
-              {session?.user ? (
-                <div className="flex gap-2 items-center">
-                  <LogoutButton />
-                </div>
-              ) : (
-                <>
-                  <Link href="/login">
-                    <Button className="rounded-full" variant="ghost">
-                      Log in
-                    </Button>
-                  </Link>
-                  <Link href="/login">
-                    <Button className="rounded-full">Get started</Button>
-                  </Link>
-                </>
-              )}
+              <Link href="/login">
+                <Button className="rounded-full" variant="ghost">
+                  Admin login
+                </Button>
+              </Link>
+              <Link href="/onboarding">
+                <Button className="rounded-full">List your business</Button>
+              </Link>
             </div>
           </nav>
         </div>
       </header>
       <main className="flex-1 container mx-auto px-4 sm:px-6 lg:px-8 py-10">
-        <div className="max-w-2xl">
-          {session?.user ? (
-            <>
-              <h1 className="text-2xl font-semibold tracking-tight">
-                Authenticated
-              </h1>
-              <p className="mt-2 text-muted-foreground">
-                You can manage your sessions and API keys via the API routes:
-              </p>
-              <div className="mt-4 space-y-2 text-sm">
-                <div>
-                  `GET /api/sessions` and `DELETE /api/sessions/:id`
-                </div>
-                <div>
-                  `POST /api/sessions/revoke-all`
-                </div>
-                <div>
-                  `GET /api/api-keys` and `POST /api/api-keys` and{" "}
-                  `DELETE /api/api-keys/:id`
-                </div>
-              </div>
-            </>
-          ) : (
-            <>
-              <h1 className="text-2xl font-semibold tracking-tight">
-                Sign in to use sessions and API keys
-              </h1>
-              <p className="mt-2 text-muted-foreground">
-                This template is pruned to Better Auth + session management +
-                API-key access.
-              </p>
-            </>
-          )}
+        <div className="mx-auto grid max-w-5xl gap-8 md:grid-cols-2 md:items-center">
+          <div className="space-y-4">
+            <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl">
+              Book appointments with trusted providers
+            </h1>
+            <p className="text-muted-foreground">
+              Find your provider and book in minutes. Public booking pages are
+              available via short links like <code>/acme-inc</code>.
+            </p>
+            <div className="flex flex-wrap gap-3">
+              <Link href="/book/demo-org">
+                <Button>Try demo booking page</Button>
+              </Link>
+              <Link href="/onboarding">
+                <Button variant="outline">Create your booking page</Button>
+              </Link>
+            </div>
+          </div>
+          <div className="rounded-xl border border-border bg-card p-6">
+            <h2 className="text-lg font-medium">How it works</h2>
+            <ul className="mt-4 space-y-2 text-sm text-muted-foreground">
+              <li>1. Open your provider link (example: /acme-inc)</li>
+              <li>2. Select service, staff, date, and slot</li>
+              <li>3. Confirm details and continue to payment</li>
+              <li>4. Receive booking confirmation instantly</li>
+            </ul>
+          </div>
         </div>
       </main>
       <footer className="w-full z-10 border-t border-border py-6 bg-background">
@@ -84,7 +64,7 @@ export default async function page() {
             <span className="text-sm font-medium">Skndan Cal</span>
           </div>
           <div className="flex items-center space-x-6 text-sm text-muted-foreground">
-            <span>Powered by Better Auth</span>
+            <span>Public booking experience</span>
           </div>
           <div className="text-sm text-muted-foreground mt-4 md:mt-0">
             © {new Date().getFullYear()} Skndan

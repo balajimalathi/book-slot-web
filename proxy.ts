@@ -2,16 +2,41 @@ import { NextResponse, type NextRequest } from "next/server";
 
 export const config = {
   matcher: [
-    "/dash",
-    "/dash/:path*",
-    "/:orgId/dash",
-    "/:orgId/dash/:path*",
-    "/:orgId/settings",
-    "/:orgId/settings/:path*",
+    "/((?!_next/static|_next/image|favicon.ico|sitemap.xml|robots.txt).*)",
   ],
 };
 
 export async function proxy(req: NextRequest) {
+  const pathname = req.nextUrl.pathname;
+
+  const isPublicOrgSlugPath = /^\/[^/]+$/.test(pathname);
+  const reservedTopLevel = new Set([
+    "",
+    "api",
+    "login",
+    "signup",
+    "forgot-password",
+    "reset-password",
+    "onboarding",
+    "dash",
+    "book",
+  ]);
+  if (isPublicOrgSlugPath) {
+    const slug = pathname.slice(1);
+    if (!reservedTopLevel.has(slug)) {
+      return NextResponse.rewrite(new URL(`/book/${slug}`, req.url));
+    }
+  }
+
+  const requiresAuth =
+    pathname === "/dash" ||
+    pathname.startsWith("/dash/") ||
+    /^\/[^/]+\/dash(?:\/|$)/.test(pathname) ||
+    /^\/[^/]+\/settings(?:\/|$)/.test(pathname);
+  if (!requiresAuth) {
+    return NextResponse.next();
+  }
+
   // Middleware runs in Edge runtime. Avoid importing BetterAuth here (it
   // pulls in dynamic code + Node-only dependencies).
   //
@@ -26,8 +51,6 @@ export async function proxy(req: NextRequest) {
     const url = new URL("/login", req.url);
     return NextResponse.redirect(url);
   }
-
-  const pathname = req.nextUrl.pathname;
 
   const onboardingPath = "/onboarding";
 

@@ -14,6 +14,8 @@ export async function updateBookingPaymentByReferenceCode(input: {
   const [row] = await db
     .select({
       id: bookingTable.id,
+      paymentStatus: bookingTable.paymentStatus,
+      status: bookingTable.status,
     })
     .from(bookingTable)
     .where(
@@ -25,6 +27,15 @@ export async function updateBookingPaymentByReferenceCode(input: {
 
   if (!row) {
     return { found: false };
+  }
+
+  // Ignore duplicate or out-of-order updates that would downgrade a settled booking.
+  if (
+    row.paymentStatus === "CONFIRMED" &&
+    input.paymentStatus !== "CONFIRMED" &&
+    row.status !== "CANCELLED"
+  ) {
+    return { found: true };
   }
 
   const now = new Date();

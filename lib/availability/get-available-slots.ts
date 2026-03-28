@@ -105,7 +105,11 @@ export async function getAvailableSlots(
   }
 
   const staffList = Array.isArray(svcRow.staffIds) ? svcRow.staffIds : [];
-  if (!staffList.includes(staffId)) {
+  const allowsOrgWideOnly = staffList.length === 0;
+  if (
+    (allowsOrgWideOnly && staffId !== ORG_WIDE_STAFF_ID) ||
+    (!allowsOrgWideOnly && !staffList.includes(staffId))
+  ) {
     throw new GetAvailableSlotsNotFoundError("staff");
   }
 
